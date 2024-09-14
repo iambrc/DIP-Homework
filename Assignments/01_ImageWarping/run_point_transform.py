@@ -71,7 +71,7 @@ def clear_points():
 with gr.Blocks() as demo:
     with gr.Row():
         with gr.Column():
-            input_image = gr.Image(source="upload", label="上传图片", interactive=True, width=800, height=200)
+            input_image = gr.Image(label="上传图片", interactive=True, width=800, height=200)
             point_select = gr.Image(label="点击选择控制点和目标点", interactive=True, width=800, height=800)
             
         with gr.Column():
