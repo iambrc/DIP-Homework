@@ -16,37 +16,32 @@ def apply_transform(image, scale, rotation, translation_x, translation_y, flip_h
     pad_size = min(image.shape[0], image.shape[1]) // 2
     image_new = np.zeros((pad_size * 2 + image.shape[0], pad_size * 2 + image.shape[1], 3), dtype=np.uint8) + np.array(
         (255, 255, 255), dtype=np.uint8).reshape(1, 1, 3)
-    transformed_image = np.array(image_new)
     image_new[pad_size:pad_size + image.shape[0], pad_size:pad_size + image.shape[1]] = image
     image = np.array(image_new)
-    # transformed_image = np.array(image)
 
     ### FILL: Apply Composition Transform 
     # Note: for scale and rotation, implement them around the center of the image （围绕图像中心进行放缩和旋转）
-    c = np.cos(rotation * np.pi / 180)
-    s = np.sin(rotation * np.pi / 180)
-    height = image.shape[0]
-    width = image.shape[1]
+    height, width = image.shape[:2]
+    # scale
+    scale_matrix = np.array([[scale, 0, (1-scale)*width/2], [0, scale, (1-scale)*height/2]], dtype=np.float32)
+    scale_matrix = to_3x3(scale_matrix)
+    # rotation
+    theta = np.radians(rotation)
+    rotation_matrix = np.array([[np.cos(theta), -np.sin(theta), (1-np.cos(theta)+np.sin(theta))*width/2],
+                                [np.sin(theta), np.cos(theta), (1-np.cos(theta)-np.sin(theta))*height/2]],
+                                dtype=np.float32)
+    rotation_matrix = to_3x3(rotation_matrix)
+    # translation
+    translation_matrix = np.array([[1, 0, translation_x], [0, 1, translation_y]], dtype=np.float32)
+    translation_matrix = to_3x3(translation_matrix)
+    # compound matrix
+    compound_matrix = translation_matrix @ scale_matrix @ rotation_matrix
+    compound_matrix_2x3 = compound_matrix[:2, :]
 
-    # 剔除部分区域，减少计算量，可以调用np.dot函数做矩阵乘法，也可以直接按照下面的计算，个人认为比多次调用dot函数和to_3x3函数高效
-    new_size = int(scale * np.sqrt((height - 2 * pad_size) ** 2 + (width - 2 * pad_size) ** 2))
-    left = max(0, int(translation_x + width / 2 - new_size / 2))
-    right = min(width, int(translation_x + width / 2 + new_size / 2))
-    up = max(0, int(translation_y + height / 2 - new_size / 2))
-    bottom = min(height, int(translation_y + height / 2 + new_size / 2))
-
-    for i in range(up, bottom, 1):
-        for j in range(left, right, 1):
-            tmp1 = j - width / 2 - translation_x
-            tmp2 = i - height / 2 - translation_y
-            jj = c / scale * tmp1 + s / scale * tmp2
-            ii = -s / scale * tmp1 + c / scale * tmp2
-            if flip_horizontal:
-                jj = -jj
-            jj = jj + width / 2
-            ii = ii + height / 2
-            if 0 <= ii < height and 0 <= jj < width:
-                transformed_image[i, j, :] = image[int(ii), int(jj), :]
+    transformed_image = cv2.warpAffine(image, compound_matrix_2x3, (width, height), borderValue=(255, 255, 255))
+    # Flip horizontally if needed
+    if flip_horizontal:
+        transformed_image = cv2.flip(transformed_image, 1)
 
     return transformed_image
 
