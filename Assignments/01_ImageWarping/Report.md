@@ -110,8 +110,8 @@ if flip_horizontal:
 <center>
 <figure>
 <img src="pics/lena.png" alt="alt text" width="250">
-<img src="pics/mls.png" alt="alt text" width="233">
-<img src="pics/test.png" alt="alt text" width="240">
+<img src="pics/mls.png" alt="alt text" width="250">
+<img src="pics/test.png" alt="alt text" width="250">
 </figure>
 </center>
 
@@ -124,8 +124,10 @@ $$\widehat{p}_{i}=p_i-p_{\ast},\widehat{q}_{i}=q_i-q_{\ast},\omega_i=\frac{1}{|p
 
 <center>
 <figure>
-<img src="pics/lena_MLSa.png" alt="alt text" width="250">   <img src="pics/man_MLSa.png" alt="alt text" width="233">
-<img src="pics/test_MLSa.png" alt="alt text" width="240">   <img src="pics/test2_MLSa.png" alt="alt text" width="240">
+<img src="pics/lena_MLSa.png" alt="alt text" width="250">
+<img src="pics/man_MLSa.png" alt="alt text" width="250">
+<img src="pics/test_MLSa.png" alt="alt text" width="250">
+<img src="pics/test2_MLSa.png" alt="alt text" width="250">
 </figure>
 </center>
 
@@ -135,8 +137,10 @@ $$\mu _{s}=\sum _{i}w_{i}\widehat{p}_{i}\widehat{p_{i}}^{T},A_{i}=\omega _{i}\be
 
 <center>
 <figure>
-<img src="pics/lena_MLSs.png" alt="alt text" width="250">   <img src="pics/man_MLSs.png" alt="alt text" width="233">
-<img src="pics/test_MLSs.png" alt="alt text" width="240">   <img src="pics/test2_MLSs.png" alt="alt text" width="240">
+<img src="pics/lena_MLSs.png" alt="alt text" width="250">
+<img src="pics/man_MLSs.png" alt="alt text" width="250">
+<img src="pics/test_MLSs.png" alt="alt text" width="250">
+<img src="pics/test2_MLSs.png" alt="alt text" width="250">
 </figure>
 </center>
 
@@ -146,8 +150,10 @@ $$\overrightarrow{f_r}\left( v\right)=\sum_{i} \widehat{q}_{i}A_i,A_{i}=\omega _
 
 <center>
 <figure>
-<img src="pics/lena_MLSr.png" alt="alt text" width="250">   <img src="pics/man_MLSr.png" alt="alt text" width="233">
-<img src="pics/test_MLSr.png" alt="alt text" width="240">   <img src="pics/test2_MLSr.png" alt="alt text" width="240">
+<img src="pics/lena_MLSr.png" alt="alt text" width="250">
+<img src="pics/man_MLSr.png" alt="alt text" width="250">
+<img src="pics/test_MLSr.png" alt="alt text" width="250">
+<img src="pics/test2_MLSr.png" alt="alt text" width="250">
 </figure>
 </center>
 
@@ -164,8 +170,10 @@ $$\begin{pmatrix} p_1 & ... & p_n\\ 1 & ... & 1 \end{pmatrix}_{3\times n}
 
 <center>
 <figure>
-<img src="pics/lena_RBF.png" alt="alt text" width="250">   <img src="pics/man_RBF.png" alt="alt text" width="233">
-<img src="pics/test_RBF.png" alt="alt text" width="240">   <img src="pics/test2_RBF.png" alt="alt text" width="240">
+<img src="pics/lena_RBF.png" alt="alt text" width="250">
+<img src="pics/man_RBF.png" alt="alt text" width="250">
+<img src="pics/test_RBF.png" alt="alt text" width="250">
+<img src="pics/test2_RBF.png" alt="alt text" width="250">
 </figure>
 </center>
 
@@ -183,8 +191,10 @@ $$p_{j-i}=p_j-p_i~~~,~~~q_{j-i}=q_j-q_i$$
 
 <center>
 <figure>
-<img src="pics/lena_IDW.png" alt="alt text" width="250">   <img src="pics/man_IDW.png" alt="alt text" width="233">
-<img src="pics/test_IDW.png" alt="alt text" width="240">   <img src="pics/test2_IDW.png" alt="alt text" width="240">
+<img src="pics/lena_IDW.png" alt="alt text" width="250">
+<img src="pics/man_IDW.png" alt="alt text" width="250">
+<img src="pics/test_IDW.png" alt="alt text" width="250">
+<img src="pics/test2_IDW.png" alt="alt text" width="250">
 </figure>
 </center>
 
