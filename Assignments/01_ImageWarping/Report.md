@@ -260,5 +260,8 @@ $$p_{j-i}=p_j-p_i~~~,~~~q_{j-i}=q_j-q_i$$
 > 
 > opencv教程：[opencv-python教程](https://codec.wang/docs/opencv)
 
+(从Github上看Report.md有些数学公式不知道为什么无法正常显示，在vscode上是可以正常显示的，可以下载Report.md用vscode打开)
+
+(另外录制Gif文件内存太大不好推送到Github上，因此报告里贴了图片)
 
 (如有错误欢迎指正， 后续可能会有更新和修改)
