@@ -2,6 +2,12 @@
 
 ### In this assignment, you will implement traditional DIP (Poisson Image Editing) and deep learning-based DIP (Pix2Pix) with PyTorch.
 
+---
+
+实验报告见[PoissonImageEditing.md](PoissonImageEditing.md)
+与 [Pix2Pix.md](Pix2Pix.md)。
+
+---
 ### Resources:
 - [Assignment Slides](https://rec.ustc.edu.cn/share/705bfa50-6e53-11ef-b955-bb76c0fede49)  
 - [Paper: Poisson Image Editing](https://www.cs.jhu.edu/~misha/Fall07/Papers/Perez03.pdf)
