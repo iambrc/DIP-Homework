@@ -164,8 +164,8 @@ def main():
     train_dataset = FacadesDataset(list_file='train_list.txt')
     val_dataset = FacadesDataset(list_file='val_list.txt')
 
-    train_loader = DataLoader(train_dataset, batch_size=100, shuffle=True, num_workers=4)
-    val_loader = DataLoader(val_dataset, batch_size=100, shuffle=False, num_workers=4)
+    train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True, num_workers=4)
+    val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False, num_workers=4)
 
     # Initialize model, loss function, and optimizer
     model = FullyConvNetwork().to(device)
