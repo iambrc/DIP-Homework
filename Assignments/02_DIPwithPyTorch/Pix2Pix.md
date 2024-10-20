@@ -9,9 +9,16 @@
 ```basic
 python train.py
 ```
+
+## 模型使用
+最终的网络参数已训练完成，通过运行test.py可对指定图片进行测试。
+```basic
+python test.py path/to/your/test_image.jpg path/to/save/output_image.jpg
+```
+在终端运行该脚本时，需要传入两个参数，分别为输入图片的路径和输出图片的保存路径。
+请确保将路径 path/to/your/test_image.jpg 和 path/to/save/output_image.jpg 替换为实际的文件路径。
+
 ---
-
-
 ## 网络参数与结构的调整过程
 ### FCN-8s(Net1)
 首次尝试使用论文中提到的FCN-8s网络(相比其他网络效果更好)。
@@ -30,24 +37,31 @@ python train.py
 ![FCNnet1_train](pics/net1_train.png "FCNnet1训练集结果")
 ![FCNnet1_val](pics/net1_val.png "FCNnet1验证集结果")
 
-为了解决过拟合问题，我们修改上述FCN-8s，降低参数量得到下面的net2。
+---
+出现上述情况的另一个可能的原因是数据集的问题，训练数据中可能存在部分噪声比较大的数据，需要删去个别影响大的数据以保证模型收敛。
+比如下面的数据明显噪声和误差很大：
+![train_data](pics/error.jpg "带有较大噪声的训练数据")
+
+另一方面可以通过opencv给数据做一些随机的旋转、缩放、翻转来实现数据增强来缓和过拟合现象，见[data_augumentation.py](Pix2Pix/data_augumentation.py)。
+(**此脚本不必运行，datasets中的数据已经经过预处理**)
+
+
+
 
 ### FCN-8s(net2)
-相比与net1，net2将初始步的通道数由32减为8，之后的通道数也依次减少，总参数量大幅下降。
-
-然而在训练中，训练集误差稳定在0.12左右，验证集误差稳定在0.42左右。两种误差都较大，说明可能有欠拟合且学习中遇到瓶颈（也可能是学习率太大或网络结构有问题）。
-如下图所示：
-
-![FCNnet2_train](pics/net2_train.png "FCNnet2训练集结果")
-![FCNnet2_val](pics/net2_val.png "FCNnet2验证集结果")
-
-### FCN-8s(net3)
 由上面的结果发现网络的结构不能太简单也不能太复杂，针对同一个数据集，如何平衡好过拟合与欠拟合的问题十分重要。
 经过多次尝试与参数调整后，最终设置的FCN-8s结构见[FCN_network.py](Pix2Pix/FCN_network.py)。
 
 另外还添加了脚本[plot_loss.py](Pix2Pix/plot_loss.py)用于绘制loss曲线。
+![loss曲线](pics/loss.png)
 
+从结果来看可能是学习率设置不合理导致收敛时仍有一定误差，可以调整学习率并以之前训练的权重为初始化权重继续训练，但是需要小心过拟合。
 
+模型的训练权重已经保存在Pix2Pix文件夹中，通过test.py可以对给定的图片进行测试。
+下面是测试结果：
+
+![测试1](pics/output.png)
+![测试2](pics/output2.png)
 
 ---
 ## 总结与不足
@@ -59,9 +73,14 @@ python train.py
 
 3.训练误差或验证误差出现振荡或不下降的情况，需要适当调整batchsize或学习率以平衡振动和收敛缓慢的问题。
 
+4.数据集太小或者存在一些“不好”的数据影响收敛，需要进行数据清洗及数据增强。
+
 本次实验的一些不足之处：
 
-没有使用更多的数据集来提高模型的泛化能力。其中主要是本人的设备性能有限，训练一次网络时间较长，再加上其它数据集占用内存很大，故没有做更进一步的尝试。
+没有使用更多的数据集来提高模型的泛化能力。其中主要是本人的设备性能有限，训练一次网络时间较长，再加上其它数据集占用内存很大(cityscapes 56GB)，故没有做更进一步的尝试。
+
+最后一点点感悟：本次作业是本人第一次接触pytorch训练神经网络，训练模型调参数是一个费时费力的过程，需要积累很多经验才能少走弯路，
+这次作业让我受益匪浅，收获了很多有关机器学习的知识和实践技巧。
 
 ## Reference and Acknowledgement
 >📋 Thanks for the algorithms proposed by [Paper: Image-to-Image Translation with Conditional Adversarial Nets](https://phillipi.github.io/pix2pix/)
@@ -77,3 +96,5 @@ python train.py
 > [知乎相关文章3](https://zhuanlan.zhihu.com/p/622943295)
 > 
 > （包括如何处理欠拟合、过拟合等问题）
+
+> 最后感谢Github copilot和gpt-4o对本次作业提供的指导与帮助

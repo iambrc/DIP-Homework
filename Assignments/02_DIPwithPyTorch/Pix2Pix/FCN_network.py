@@ -37,15 +37,12 @@ class FullyConvNetwork(nn.Module):
         self.conv6 = nn.Sequential(
             nn.Conv2d(256, 256, kernel_size=1),
             nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True),
-            nn.Dropout(0.8)
-
+            nn.ReLU(inplace=True)
         )
         self.conv7 = nn.Sequential(
             nn.Conv2d(256, 256, kernel_size=1),
             nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True),
-            nn.Dropout(0.8)
+            nn.ReLU(inplace=True)
         )
 
         # Decoder (Deconvolutional Layers)
