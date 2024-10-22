@@ -47,7 +47,7 @@ def main(image_path, output_path):
 
     # Load the trained model
     model = FullyConvNetwork().to(device)
-    model.load_state_dict(torch.load('pre_trained.pth'))
+    model.load_state_dict(torch.load('facades_180.pth'))
     model.eval()
 
     # Load and preprocess the test image

@@ -9,65 +9,65 @@ class FullyConvNetwork(nn.Module):
         # Encoder (Convolutional Layers)
         ### FILL: add more CONV Layers
         self.conv1 = nn.Sequential(
-            nn.Conv2d(3, 16, kernel_size=4, stride=2, padding=1),
-            nn.BatchNorm2d(16),
-            nn.ReLU(inplace=True)
-        )
-        self.conv2 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=4, stride=2, padding=1),
+            nn.Conv2d(3, 32, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(32),
             nn.ReLU(inplace=True)
         )
-        self.conv3 = nn.Sequential(
+        self.conv2 = nn.Sequential(
             nn.Conv2d(32, 64, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True)
         )
-        self.conv4 = nn.Sequential(
+        self.conv3 = nn.Sequential(
             nn.Conv2d(64, 128, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True)
+        )
+        self.conv4 = nn.Sequential(
+            nn.Conv2d(128, 256, kernel_size=4, stride=2, padding=1),
+            nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
         )
         self.conv5 = nn.Sequential(
-            nn.Conv2d(128, 256, kernel_size=4, stride=2, padding=1),
-            nn.BatchNorm2d(256),
+            nn.Conv2d(256, 512, kernel_size=4, stride=2, padding=1),
+            nn.BatchNorm2d(512),
             nn.ReLU(inplace=True)
         )
 
         self.conv6 = nn.Sequential(
-            nn.Conv2d(256, 256, kernel_size=1),
-            nn.BatchNorm2d(256),
+            nn.Conv2d(512, 512, kernel_size=1),
+            nn.BatchNorm2d(512),
             nn.ReLU(inplace=True)
         )
         self.conv7 = nn.Sequential(
-            nn.Conv2d(256, 256, kernel_size=1),
-            nn.BatchNorm2d(256),
+            nn.Conv2d(512, 512, kernel_size=1),
+            nn.BatchNorm2d(512),
             nn.ReLU(inplace=True)
         )
 
         # Decoder (Deconvolutional Layers)
         self.deconv1 = nn.Sequential(
+            nn.ConvTranspose2d(512, 256, kernel_size=4, stride=2, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True)
+        )
+        self.deconv2 = nn.Sequential(
             nn.ConvTranspose2d(256, 128, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True)
         )
-        self.deconv2 = nn.Sequential(
+        self.deconv3 = nn.Sequential(
             nn.ConvTranspose2d(128, 64, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True)
         )
-        self.deconv3 = nn.Sequential(
+        self.deconv4 = nn.Sequential(
             nn.ConvTranspose2d(64, 32, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(32),
             nn.ReLU(inplace=True)
         )
-        self.deconv4 = nn.Sequential(
-            nn.ConvTranspose2d(32, 16, kernel_size=4, stride=2, padding=1),
-            nn.BatchNorm2d(16),
-            nn.ReLU(inplace=True)
-        )
         self.deconv5 = nn.Sequential(
-            nn.ConvTranspose2d(16, 3, kernel_size=4, stride=2, padding=1),
+            nn.ConvTranspose2d(32, 3, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(3),
             nn.Tanh()
         )
