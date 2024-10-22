@@ -8,6 +8,7 @@ from torch.utils.data import DataLoader
 from facades_dataset import FacadesDataset
 from FCN_network import FullyConvNetwork
 from torch.optim.lr_scheduler import StepLR
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from plot_loss import plot_loss
 
 
@@ -86,14 +87,14 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device, epoch, num_
         optimizer.zero_grad()
 
         # Forward pass
-        outputs = model(image_rgb)
+        outputs = model(image_semantic)
 
         # Save sample images every 20 epochs
         if epoch % 20 == 0 and i == 0:
-            save_images(image_rgb, image_semantic, outputs, 'train_results', epoch)
+            save_images(image_semantic, image_rgb, outputs, 'train_results', epoch)
 
         # Compute the loss
-        loss = criterion(outputs, image_semantic)
+        loss = criterion(outputs, image_rgb)
 
         # Backward pass and optimization
         loss.backward()
@@ -103,8 +104,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device, epoch, num_
         running_loss += loss.item()
 
         # Print loss information
-        if (epoch + 1) % 5 == 0:
-            print(f'Epoch [{epoch + 1}/{num_epochs}], Step [{i + 1}/{len(dataloader)}], Loss: {loss.item():.4f}')
+        print(f'Epoch [{epoch + 1}/{num_epochs}], Step [{i + 1}/{len(dataloader)}], Loss: {loss.item():.4f}')
 
     avg_loss = running_loss / len(dataloader)
     return avg_loss
@@ -135,20 +135,19 @@ def validate(model, dataloader, criterion, device, epoch, num_epochs):
             image_semantic = image_semantic.to(device)
 
             # Forward pass
-            outputs = model(image_rgb)
+            outputs = model(image_semantic)
 
             # Compute the loss
-            loss = criterion(outputs, image_semantic)
+            loss = criterion(outputs, image_rgb)
             val_loss += loss.item()
 
             # Save sample images every 20 epochs
             if epoch % 20 == 0 and i == 0:
-                save_images(image_rgb, image_semantic, outputs, 'val_results', epoch)
+                save_images(image_semantic, image_rgb, outputs, 'val_results', epoch)
 
     # Calculate average validation loss
     avg_val_loss = val_loss / len(dataloader)
-    if (epoch + 1) % 5 == 0:
-        print(f'Epoch [{epoch + 1}/{num_epochs}], Validation Loss: {avg_val_loss:.4f}')
+    print(f'Epoch [{epoch + 1}/{num_epochs}], Validation Loss: {avg_val_loss:.4f}')
 
     return avg_val_loss
 
@@ -164,24 +163,18 @@ def main():
     train_dataset = FacadesDataset(list_file='train_list.txt')
     val_dataset = FacadesDataset(list_file='val_list.txt')
 
-    train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True, num_workers=4)
-    val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False, num_workers=4)
+    train_loader = DataLoader(train_dataset, batch_size=100, shuffle=True, num_workers=4)
+    val_loader = DataLoader(val_dataset, batch_size=100, shuffle=False, num_workers=4)
 
     # Initialize model, loss function, and optimizer
     model = FullyConvNetwork().to(device)
 
-    checkpoint_path = 'pre_trained.pth'
-    if os.path.exists(checkpoint_path):
-        model.load_state_dict(torch.load(checkpoint_path))
-        print(f"Loaded model weights from {checkpoint_path}")
-    else:
-        print(f"No checkpoint found at {checkpoint_path}, training from scratch.")
-
     criterion = nn.L1Loss()
-    optimizer = optim.Adam(model.parameters(), lr=0.01, betas=(0.5, 0.999))
+    optimizer = optim.Adam(model.parameters(), lr=0.001, betas=(0.5, 0.999))
 
     # Add a learning rate scheduler for decay
-    scheduler = StepLR(optimizer, step_size=10, gamma=0.4)
+    # scheduler = StepLR(optimizer, step_size=100, gamma=0.2)
+    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5)
 
     # Training loop
     num_epochs = 800
@@ -194,7 +187,7 @@ def main():
         val_losses.append(val_loss)
 
         # Step the scheduler after each epoch
-        scheduler.step()
+        scheduler.step(train_loss)
 
         # Save loss curve every 20 epochs
         if (epoch + 1) % 20 == 0:
