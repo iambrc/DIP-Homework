@@ -52,7 +52,33 @@ scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5)
 ![val](pics/val.png "验证结果")
 测试结果：
 
-![test](pics/output2.png "测试结果")
+![test2](pics/test2.png "测试2")
+![output2](pics/output2.png "测试结果2")
+
+---
+为了得到更好的泛化能力，我们可以使用更大的数据集cityscapes来训练网络。还是采用facades类似的处理方法，将原图像和语义图缩小成512x256后拼接到一起。
+压缩后图像可能会有所变形，但是占用内存会减少，训练速度也会大大加快。下面是一个训练数据的例子：
+![example](pics/ex.png)
+
+**注意：训练两个不同数据集时train.py要做调整，数据集也有一些处理，但是训练的权重已经保存，无需再训练，可以直接利用test.py测试结果。
+(注意加载的训练权重是用于facades还是cityscapes)**
+
+训练参数设置：
+```python
+train_loader = DataLoader(train_dataset, batch_size=200, shuffle=True, num_workers=4)
+val_loader = DataLoader(val_dataset, batch_size=200, shuffle=False, num_workers=4)
+model = FullyConvNetwork().to(device)
+criterion = nn.L1Loss()
+optimizer = optim.Adam(model.parameters(), lr=0.005, betas=(0.5, 0.999), weight_decay=1e-4)
+scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5)
+```
+
+训练结果如下：
+![loss2](pics/loss2.png "loss曲线2")
+可以看到40步之后出现了较大波动，验证误差上升，说明出现了过拟合，应该停止训练选择合适的epoch作为结果。
+
+![test3](pics/test3.png)
+![output3](pics/output3.png)
 
 
 ---
@@ -65,6 +91,9 @@ scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5)
 
 3.训练误差或验证误差出现振荡或不下降的情况，需要适当调整batchsize或学习率以平衡振动和收敛缓慢的问题。
 
+不足之处：
+
+本次实验结果与论文结果还是有一定差距，很可能是由于网络结构或参数调整不当导致的偏差，也可能是因为没有使用pytorch自带的resnet,vgg等网络的预训练权重。
 
 最后一点点感悟：本次作业是本人第一次接触pytorch训练神经网络，训练模型调参数是一个费时费力的过程，需要积累很多经验才能少走弯路，
 这次作业让我受益匪浅，收获了很多有关机器学习的知识和实践技巧。
@@ -72,7 +101,7 @@ scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5)
 ## Reference and Acknowledgement
 >📋 Thanks for the algorithms proposed by [Paper: Image-to-Image Translation with Conditional Adversarial Nets](https://phillipi.github.io/pix2pix/)
 > 
->   [Paper: Fully Convolutional Networks for Semantic Segmentation](https://arxiv.org/abs/1411.4038)
+> [Paper: Fully Convolutional Networks for Semantic Segmentation](https://arxiv.org/abs/1411.4038)
 
 > 其他参考资料：DIP课程课件，Pytorch相关教程
 > 

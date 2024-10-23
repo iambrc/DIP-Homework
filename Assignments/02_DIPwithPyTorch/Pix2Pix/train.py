@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from facades_dataset import FacadesDataset
+from facades_dataset import FacadesDataset, CityscapesDataset
 from FCN_network import FullyConvNetwork
 from torch.optim.lr_scheduler import StepLR
 from torch.optim.lr_scheduler import ReduceLROnPlateau
@@ -53,7 +53,8 @@ def save_images(inputs, targets, outputs, folder_name, epoch, num_images=5):
         output_img_np = tensor_to_image(outputs[i])
 
         # Concatenate the images horizontally
-        comparison = np.hstack((input_img_np, target_img_np, output_img_np))
+        # comparison = np.hstack((input_img_np, target_img_np, output_img_np))
+        comparison = np.vstack((input_img_np, target_img_np, output_img_np))
 
         # Save the comparison image
         cv2.imwrite(f'{folder_name}/epoch_{epoch}/result_{i + 1}.png', comparison)
@@ -89,8 +90,8 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device, epoch, num_
         # Forward pass
         outputs = model(image_semantic)
 
-        # Save sample images every 20 epochs
-        if epoch % 20 == 0 and i == 0:
+        # Save sample images every 5 epochs
+        if epoch % 5 == 0 and i == 0:
             save_images(image_semantic, image_rgb, outputs, 'train_results', epoch)
 
         # Compute the loss
@@ -141,8 +142,8 @@ def validate(model, dataloader, criterion, device, epoch, num_epochs):
             loss = criterion(outputs, image_rgb)
             val_loss += loss.item()
 
-            # Save sample images every 20 epochs
-            if epoch % 20 == 0 and i == 0:
+            # Save sample images every 5 epochs
+            if epoch % 5 == 0 and i == 0:
                 save_images(image_semantic, image_rgb, outputs, 'val_results', epoch)
 
     # Calculate average validation loss
@@ -160,20 +161,22 @@ def main():
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
     # Initialize datasets and dataloaders
-    train_dataset = FacadesDataset(list_file='train_list.txt')
-    val_dataset = FacadesDataset(list_file='val_list.txt')
+    # train_dataset = FacadesDataset(list_file='train_list.txt')
+    # val_dataset = FacadesDataset(list_file='val_list.txt')
+    train_dataset = CityscapesDataset(list_file='train_list.txt')
+    val_dataset = CityscapesDataset(list_file='val_list.txt')
 
-    train_loader = DataLoader(train_dataset, batch_size=100, shuffle=True, num_workers=4)
-    val_loader = DataLoader(val_dataset, batch_size=100, shuffle=False, num_workers=4)
+    train_loader = DataLoader(train_dataset, batch_size=200, shuffle=True, num_workers=4)
+    val_loader = DataLoader(val_dataset, batch_size=200, shuffle=False, num_workers=4)
 
     # Initialize model, loss function, and optimizer
     model = FullyConvNetwork().to(device)
 
     criterion = nn.L1Loss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001, betas=(0.5, 0.999))
+    optimizer = optim.Adam(model.parameters(), lr=0.005, betas=(0.5, 0.999))
 
     # Add a learning rate scheduler for decay
-    # scheduler = StepLR(optimizer, step_size=100, gamma=0.2)
+    # scheduler = StepLR(optimizer, step_size=10, gamma=0.8)
     scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5)
 
     # Training loop
@@ -187,14 +190,14 @@ def main():
         val_losses.append(val_loss)
 
         # Step the scheduler after each epoch
-        scheduler.step(train_loss)
+        scheduler.step(val_loss)
 
         # Save loss curve every 20 epochs
-        if (epoch + 1) % 20 == 0:
+        if (epoch + 1) % 10 == 0:
             plot_loss(train_losses, val_losses, epoch + 1)
 
-        # Save model checkpoint every 100 epochs
-        if (epoch + 1) % 20 == 0:
+        # Save model checkpoint every 10 epochs
+        if (epoch + 1) % 10 == 0:
             os.makedirs('checkpoints', exist_ok=True)
             torch.save(model.state_dict(), f'checkpoints/pix2pix_model_epoch_{epoch + 1}.pth')
 

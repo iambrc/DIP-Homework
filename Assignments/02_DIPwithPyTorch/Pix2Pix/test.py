@@ -16,7 +16,7 @@ def load_image(image_path):
         torch.Tensor: Preprocessed image tensor.
     """
     image = cv2.imread(image_path)
-    image = cv2.resize(image, (256, 256))
+    image = cv2.resize(image, (512, 256))  # 注意调整图片大小
     image = image / 255.0 * 2 - 1  # Normalize to [-1, 1]
     image = np.transpose(image, (2, 0, 1))  # Change to (C, H, W)
     image = torch.tensor(image, dtype=torch.float32)
@@ -47,7 +47,8 @@ def main(image_path, output_path):
 
     # Load the trained model
     model = FullyConvNetwork().to(device)
-    model.load_state_dict(torch.load('facades_180.pth'))
+    # 注意权重选择
+    model.load_state_dict(torch.load('cityscapes_70.pth'))
     model.eval()
 
     # Load and preprocess the test image
