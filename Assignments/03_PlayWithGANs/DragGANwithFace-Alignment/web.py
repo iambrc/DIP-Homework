@@ -283,17 +283,56 @@ def main():
             'history': []
         })
         points = gr.State({'target': [], 'handle': []})
+
+        smile_points = {'target': [], 'handle': []}
+        close_eye_points = {'target': [], 'handle': []}
+        thin_face_points = {'target': [], 'handle': []}
+        mouth_points = {'target': [], 'handle': []}
+
         size = gr.State(CKPT_SIZE[DEFAULT_CKPT])
         target_point = gr.State(False)
         preds = fa.get_landmarks(skimage.img_as_ubyte(img))
         img = Image.fromarray(skimage.img_as_ubyte(img))
         draw = ImageDraw.Draw(img)
         for pred in preds:
+            smile_points['handle'] = [[pred[48, 1], pred[48, 0]], [pred[54, 1], pred[54, 0]]]
+            smile_points['target'] = [[pred[48, 1] - 40, pred[48, 0] - 20], [pred[54, 1] - 40, pred[54, 0] + 20]]
+
+            close_eye_points['handle'] = [[pred[37, 1], pred[37, 0]], [pred[38, 1], pred[38, 0]],
+                                          [pred[43, 1], pred[43, 0]], [pred[44, 1], pred[44, 0]]]
+            close_eye_points['target'] = [[pred[41, 1], pred[41, 0]], [pred[40, 1], pred[40, 0]],
+                                          [pred[47, 1], pred[47, 0]], [pred[46, 1], pred[46, 0]]]
+
+            for i in range(8):
+                thin_face_points['handle'].append([pred[i, 1], pred[i, 0]])
+                thin_face_points['target'].append([pred[i, 1], pred[i, 0]])
+            for i in range(8):
+                thin_face_points['handle'].append([pred[i+8, 1], pred[i+8, 0]])
+                thin_face_points['target'].append([pred[i+8, 1], pred[i+8, 0]])
+            for i in range(8):
+                thin_face_points['target'][i][1] += 10
+                thin_face_points['target'][i+8][1] -= 10
+
+            for i in range(5):
+                mouth_points['handle'].append([pred[49+i, 1], pred[49+i, 0]])
+                mouth_points['target'].append([pred[49+i, 1], pred[49+i, 0]])
+            for i in range(5):
+                mouth_points['handle'].append([pred[55+i, 1], pred[55+i, 0]])
+                mouth_points['target'].append([pred[55+i, 1], pred[55+i, 0]])
+            for i in range(5):
+                mouth_points['target'][i][0] += (pred[59 - i, 1] - pred[49 + i, 1]) / 2
+                mouth_points['target'][i+5][0] -= (pred[55 + i, 1] - pred[53 - i, 1]) / 2
+
             for i in range(len(pred)):
                 handle_point = [pred[i, 0], pred[i, 1]]
                 handle_coords = [handle_point[0] - 3, handle_point[1] - 3, handle_point[0] + 3, handle_point[1] + 3]
                 draw.ellipse(handle_coords, fill="green")
+
         preds = gr.State(preds)
+        smile_points = gr.State(smile_points)
+        close_eye_points = gr.State(close_eye_points)
+        thin_face_points = gr.State(thin_face_points)
+        mouth_points = gr.State(mouth_points)
 
         with gr.Row():
             with gr.Column(scale=0.3):
@@ -314,6 +353,10 @@ def main():
                             undo_btn = gr.Button('Undo Last')
                     with gr.Row():
                         btn = gr.Button('Drag it', variant='primary')
+                        smile_btn = gr.Button('Make she smile')
+                        close_eye_btn = gr.Button('Close her eyes')
+                        thin_face_btn = gr.Button('Thinning her face')
+                        mouth_btn = gr.Button('Close her mouth')
 
                 with gr.Accordion('Save', visible=False) as save_panel:
                     files = gr.Files(value=[])
@@ -335,6 +378,27 @@ def main():
             on_show_save, outputs=save_panel).then(
             on_save_files, inputs=[image, state], outputs=[files]
         )
+
+        smile_btn.click(on_drag, inputs=[model, smile_points, max_iters, state, size, mask, lr_box],
+                  outputs=[image, state, progress]).then(
+            on_show_save, outputs=save_panel).then(
+            on_save_files, inputs=[image, state], outputs=[files])
+
+        close_eye_btn.click(on_drag, inputs=[model, close_eye_points, max_iters, state, size, mask, lr_box],
+                  outputs=[image, state, progress]).then(
+            on_show_save, outputs=save_panel).then(
+            on_save_files, inputs=[image, state], outputs=[files])
+
+        thin_face_btn.click(on_drag, inputs=[model, thin_face_points, max_iters, state, size, mask, lr_box],
+                  outputs=[image, state, progress]).then(
+            on_show_save, outputs=save_panel).then(
+            on_save_files, inputs=[image, state], outputs=[files])
+
+        mouth_btn.click(on_drag, inputs=[model, mouth_points, max_iters, state, size, mask, lr_box],
+                  outputs=[image, state, progress]).then(
+            on_show_save, outputs=save_panel).then(
+            on_save_files, inputs=[image, state], outputs=[files])
+
         reset_btn.click(on_reset, inputs=[points, image, state], outputs=[points, image, target_point])
         undo_btn.click(on_undo, inputs=[points, image, state, size], outputs=[points, image, target_point])
         model_dropdown.change(on_change_model, inputs=[model_dropdown, model],

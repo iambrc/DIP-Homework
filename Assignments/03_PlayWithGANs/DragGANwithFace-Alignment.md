@@ -59,6 +59,24 @@ python -m draggan.web
 
 高清的MP4结果见[dwf1.mp4](figures/dwf1.mp4) 。
 
+此外结合face-alignment，本人添加了四个选项，分别可以实现：
+
+1.让图片中的人笑起来
+
+![result_gif](figures/smile.gif)
+
+2.让图片中的人闭上眼
+
+![result_gif](figures/eyes.gif)
+
+3.让图片中的人瘦脸
+
+![result_gif](figures/thin.gif)
+
+4.让图片上的人闭上嘴
+
+![result_gif](figures/mouth.gif)
+
 另外即使目前原版的Draggan在运行之后也会有无法上传自定义图片的bug，因此暂时没有尝试更多的结果。
 
 
