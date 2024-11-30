@@ -119,11 +119,17 @@ if flip_horizontal:
 </center>
 
 ### 1.基于MLS的仿射变换
-$$f_{a}(v) =( v-p_{\ast }) (\sum _{i} \widehat{p_i}^{T} \omega_{i} \widehat{p}_{i})^{-1} \sum _{j} \widehat{p_{j}}^{T} \omega_{j} \widehat{q}_{j}+q_{\ast }$$
+$$
+    f_{a}(v) =( v-p_{\ast }) (\sum _{i} \widehat{p_i}^{T} \omega_{i} \widehat{p}_{i})^{-1} \sum _{j} \widehat{p_{j}}^{T} \omega_{j} \widehat{q}_{j}+q_{\ast }
+$$
 
-$$p_{\ast }=\dfrac{\sum _{i} w_{i} p_{i}}{\sum _{i} w_{i}}, q_{\ast }=\dfrac{\sum _{i} w_{i} q_{i}}{\sum _{i} w_{i}}$$
+$$
+    p_{\ast }=\dfrac{\sum _{i} w_{i} p_{i}}{\sum _{i} w_{i}}, q_{\ast }=\dfrac{\sum _{i} w_{i} q_{i}}{\sum _{i} w_{i}}
+$$
 
-$$\widehat{p}_{i}=p_{i}-p_{\ast}, \widehat{q}_{i}=q_{i}-q_{\ast}, \omega_i=\frac{1}{|p_{i}-v|^{2\alpha}}$$
+$$
+    \widehat{p}_{i}=p_{i}-p_{\ast}, \widehat{q}_{i}=q_{i}-q_{\ast}, \omega_i=\frac{1}{|p_{i}-v|^{2\alpha}}
+$$
 
 <center>
 <figure>
@@ -135,12 +141,16 @@ $$\widehat{p}_{i}=p_{i}-p_{\ast}, \widehat{q}_{i}=q_{i}-q_{\ast}, \omega_i=\frac
 </center>
 
 ### 2.基于MLS的相似变换
-$$f_{s}(v) =\sum _{i} \widehat{q}_{i} (\dfrac{1}{\mu _{s}} A_{i}) + q_{\ast }$$
+$$
+    f_{s}(v) =\sum _{i} \widehat{q}_{i} (\dfrac{1}{\mu _{s}} A_{i}) + q_{\ast }
+$$
 
-$$\mu_{s} =\sum _{i} w_{i} \widehat{p}_{i} \widehat{p_{i}}^{T}, A_{i}=\omega _{i} 
-\begin{pmatrix} \widehat{p}_{i} \\ -\widehat{p}_{i}^{\bot}\end{pmatrix}
-\begin{pmatrix} v -p_{\ast } \\ -( v -p_{\ast })^{\bot} \end{pmatrix}^{T}, 
-(x, y)^{\bot}=(-y, x)$$
+$$
+    \mu_{s} =\sum _{i} w_{i} \widehat{p}_{i} \widehat{p_{i}}^{T}, A_{i}=\omega _{i} 
+    \begin{pmatrix} \widehat{p}_{i} \\ -\widehat{p}_{i}^{\bot}\end{pmatrix}
+    \begin{pmatrix} v -p_{\ast } \\ -( v -p_{\ast })^{\bot} \end{pmatrix}^{T}, 
+    (x, y)^{\bot}=(-y, x)
+$$
 
 <center>
 <figure>
@@ -152,11 +162,15 @@ $$\mu_{s} =\sum _{i} w_{i} \widehat{p}_{i} \widehat{p_{i}}^{T}, A_{i}=\omega _{i
 </center>
 
 ### 3.基于MLS的刚性变换
-$$f_{r}(v) =| v-p_{\ast }| \dfrac{\overrightarrow{f_r} (v) }{| \overrightarrow{f_r}(v)| }+q_{\ast } $$
+$$
+    f_{r}(v) =| v-p_{\ast }| \dfrac{\overrightarrow{f_r} (v) }{| \overrightarrow{f_r}(v)| }+q_{\ast } 
+$$
 
-$$\overrightarrow{f_r}(v)=\sum_{i} \widehat{q}_{i} A_i, A_{i}=\omega _{i}
-\begin{pmatrix} \widehat{p}_{i} \\ -\widehat{p}_{i}^{\bot} \end{pmatrix}
-\begin{pmatrix} v -p_{\ast } \\ -(v -p_{\ast })^{\bot} \end{pmatrix}^{T}$$
+$$
+    \overrightarrow{f_r}(v)=\sum_{i} \widehat{q}_{i} A_i, A_{i}=\omega _{i}
+    \begin{pmatrix} \widehat{p}_{i} \\ -\widehat{p}_{i}^{\bot} \end{pmatrix}
+    \begin{pmatrix} v -p_{\ast } \\ -(v -p_{\ast })^{\bot} \end{pmatrix}^{T}
+$$
 
 <center>
 <figure>
@@ -170,7 +184,9 @@ $$\overrightarrow{f_r}(v)=\sum_{i} \widehat{q}_{i} A_i, A_{i}=\omega _{i}
 ### 4.基于RBF基函数插值的图像变形
 RBF算法假设变换的函数是基函数的线性组合形式：
 
-$$f(v) = \sum_{i=1}^{n} \alpha_i R(\Vert v-p_i \Vert) + Av+b$$
+$$
+    f(v) = \sum_{i=1}^{n} \alpha_i R(\Vert v-p_i \Vert) + Av+b
+$$
 
 其中 $R$ 是RBF基函数，这里选取 $R(d)=(d^2+r^2)^{\alpha}$ ，默认 $r=10,\alpha=0.5$ 。$A \in R^{2 \times 2}$ 和 $b \in R^{2}$ 是仿射变换的参数。
 
@@ -203,7 +219,9 @@ $$
 ### 5.基于IDW算法(Inverse distance-weighted interpolation methods)的图像变形
 IDW算法假设变换函数具有如下加权平均的形式：
 
-$$f(v) = \sum_{i=1}^{n} w_i(v)f_i(v)$$
+$$
+    f(v) = \sum_{i=1}^{n} w_i(v)f_i(v)
+$$
 
 其中 $f_i(v)$ 为仿射变换 $q_i+D_i(p-p_i)$，$w_i(v)$ 形如
 $\frac{\sigma_i(v)}{\sum_{j=1}^{n} \sigma_j(v)}$ ，
@@ -211,13 +229,19 @@ $\frac{\sigma_i(v)}{\sum_{j=1}^{n} \sigma_j(v)}$ ，
 
 于是我们需要通过最小化如下能量来得到 $D_i$ ：
 
-$$E_i(D_i) = \sum_{j=1,j\neq i}^{n} \sigma_i(p_j)\Vert q_i+D_i(p_j-p_i)-q_j\Vert^2$$
+$$
+    E_i(D_i) = \sum_{j=1,j\neq i}^{n} \sigma_i(p_j)\Vert q_i+D_i(p_j-p_i)-q_j\Vert^2
+$$
 
 容易求得：
 
-$$D_i = (\sum_{j=1,j\neq i}^{n} \sigma_i(p_j)p_{j-i}p_{j-i}^T)^{-1} (\sum_{j=1,j\neq i}^{n} \sigma_i(p_j)q_{j-i}p_{j-i}^T)$$ 
+$$
+    D_i = (\sum_{j=1,j\neq i}^{n} \sigma_i(p_j)p_{j-i}p_{j-i}^T)^{-1} (\sum_{j=1,j\neq i}^{n} \sigma_i(p_j)q_{j-i}p_{j-i}^T)
+$$ 
 
-$$p_{j-i}=p_j-p_i~~~,~~~q_{j-i}=q_j-q_i$$
+$$ 
+    p_{j-i}=p_j-p_i~~~,~~~q_{j-i}=q_j-q_i
+$$
 
 <center>
 <figure>
