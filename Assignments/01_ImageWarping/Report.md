@@ -121,7 +121,7 @@ if flip_horizontal:
 ### 1.基于MLS的仿射变换
 
 $$
-    f_{a}(v) =( v-p_{\ast }) (\sum_{i} \widehat{p_i}^{T} \omega_{i} \widehat{p}_{i})^{-1} \sum_{j} \widehat{p_{j}}^{T} \omega_{j} \widehat{q}_{j}+q_{\ast }
+    f_{a}(v) =( v-p_{\ast }) (\sum_{i} \widehat{p_i}^{T} \omega_{i} \widehat{p}\_{i})^{-1} \sum_{j} \widehat{p_j}^{T} \omega_{j} \widehat{q}\_{j}+q_{\ast }
 $$
 
 $$
@@ -129,7 +129,7 @@ $$
 $$
 
 $$
-    \widehat{p}_{i}=p_{i}-p_{\ast}, \widehat{q}_{i}=q_{i}-q_{\ast}, \boldsymbol{\omega}_i=\frac{1}{|p_{i}-v|^{2\boldsymbol{\alpha}}}
+    \widehat{p}\_{i}=p_{i}-p_{\ast}, \widehat{q}\_{i}=q_{i}-q_{\ast}, \boldsymbol{\omega}\_{i}=\frac{1}{|p_{i}-v|^{2\boldsymbol{\alpha}}}
 $$
 
 <center>
@@ -144,14 +144,14 @@ $$
 ### 2.基于MLS的相似变换
 
 $$
-    f_{s}(v) =\sum_{i} \widehat{q}_{i} (\dfrac{1}{\mu_{s}} A_{i}) + q_{\ast }
+    f_{s}(v) =\sum_{i} \widehat{q}\_{i} (\dfrac{1}{\boldsymbol{\mu}\_{s}} A_{i}) + q_{\ast }
 $$
 
 $$
-    \mu_{s} =\sum_{i} w_{i} \widehat{p}_{i} \widehat{p_{i}}^{T}, A_{i}=\omega _{i} 
+    \boldsymbol{\mu}\_{s} =\sum_{i} w_{i} \widehat{p}\_{i} \widehat{p_{i}}^{T}, A_{i}=\boldsymbol{\omega}\_{i} 
     \begin{pmatrix} 
-        \widehat{p}_{i} \\ 
-        -\widehat{p}_{i}^{\bot}
+        \widehat{p}\_{i} \\ 
+        -\widehat{p}\_{i}^{\bot}
     \end{pmatrix}
     \begin{pmatrix} 
         v -p_{\ast } \\ 
@@ -176,10 +176,10 @@ $$
 $$
 
 $$
-    \overrightarrow{f_r}(v)=\sum_{i} \widehat{q}_{i} A_i, A_{i}=\omega _{i}
+    \overrightarrow{f_r}(v)=\sum_{i} \widehat{q}\_{i} A_i, A_{i}=\boldsymbol{\omega}_{i}
     \begin{pmatrix} 
-        \widehat{p}_{i} \\ 
-        -\widehat{p}_{i}^{\bot} 
+        \widehat{p}\_{i} \\ 
+        -\widehat{p}\_{i}^{\bot} 
     \end{pmatrix}
     \begin{pmatrix} 
         v -p_{\ast } \\ 

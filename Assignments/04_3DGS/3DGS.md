@@ -15,7 +15,7 @@ conda install --yes --file requirements.txt
 
 1.计算三维协方差矩阵： 
 
-$ \boldsymbol{\Sigma} = RSS^{T}R^{T} $ 
+$$ \boldsymbol{\Sigma} = RSS^{T}R^{T} $$
 
 ```python
 # Convert scales from log space and create diagonal matrices
@@ -27,7 +27,7 @@ S = torch.diag_embed(scales)
 Covs3d = torch.matmul(torch.matmul(R, S), R.transpose(-1, -2))  # (N, 3, 3)
 ```
 
-2.计算投影变换的Jacobian矩阵： 由透视投影关系： $ x' = f_x\frac{x}{z}, y' = f_y\frac{y}{z} $，计算可得Jacobian矩阵：
+2.计算投影变换的Jacobian矩阵： 由透视投影关系： $ x' = f_x \frac{x}{z}, y' = f_y \frac{y}{z} $，计算可得Jacobian矩阵：
 
 $$
     \begin{pmatrix}
@@ -45,7 +45,7 @@ J_proj[:, 1, 2] = -cam_points[:, 1] * K[1, 1] / depths / depths
 
 3.计算2D协方差矩阵： 
 
-$ \boldsymbol{\Sigma}' = JW \boldsymbol{\Sigma} W^{T} J^{T} $
+$$ \boldsymbol{\Sigma}' = JW \boldsymbol{\Sigma} W^{T} J^{T} $$
 
 ```python
 # Transform covariance to camera space
@@ -83,7 +83,7 @@ $$
 最终像素的颜色为：
 
 $$
-  C = \sum_{i=1}^{N} T_{i} \boldsymbol{\alpha}_{i} c_{i}
+  C = \sum_{i=1}^{N} T_{i} \boldsymbol{\alpha}\_{i} c\_{i}
 $$
 
 ```python
