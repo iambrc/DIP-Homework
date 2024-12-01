@@ -13,7 +13,10 @@ conda install --yes --file requirements.txt
 ---
 ## 具体实现+细节补充
 
-1.计算三维协方差矩阵： $ \boldsymbol{\Sigma} = RSS^TR^T $ 
+1.计算三维协方差矩阵： 
+
+$ \boldsymbol{\Sigma} = RSS^{T}R^{T} $ 
+
 ```python
 # Convert scales from log space and create diagonal matrices
 scales = torch.exp(self.scales)
@@ -40,7 +43,10 @@ J_proj[:, 1, 1] = K[1, 1] / depths
 J_proj[:, 1, 2] = -cam_points[:, 1] * K[1, 1] / depths / depths
 ```
 
-3.计算2D协方差矩阵： $ \boldsymbol{\Sigma}' = JW \boldsymbol{\Sigma} W^T J^T $
+3.计算2D协方差矩阵： 
+
+$ \boldsymbol{\Sigma}' = JW \boldsymbol{\Sigma} W^{T} J^{T} $
+
 ```python
 # Transform covariance to camera space
 covs_cam = torch.matmul(R.unsqueeze(0), torch.matmul(covs3d, R.unsqueeze(0).transpose(-1, -2)))  # (N, 3, 3)
@@ -69,10 +75,13 @@ gaussian = torch.exp(exponent) / (2 * np.pi * torch.sqrt(det_covs2D))
 $$
   \alpha_{(\mathbf{x}, i)} = o_i*f(\mathbf{x}; \boldsymbol{\mu}\_{i}, \boldsymbol{\Sigma}\_{i})
 $$
+
 $$
   T_{(\mathbf{x}, i)} = \prod_{j \lt i} (1 - \alpha_{(\mathbf{x}, j)})
 $$
+
 最终像素的颜色为：
+
 $$
   C = \sum_{i=1}^{N} T_{i} \boldsymbol{\alpha}_{i} c_{i}
 $$

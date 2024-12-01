@@ -1,6 +1,3 @@
-<script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
-</script>
 # Assignment 1 - Image Warping
 
 本次实验需要实现图像变形：包括以下两个部分：
@@ -122,16 +119,17 @@ if flip_horizontal:
 </center>
 
 ### 1.基于MLS的仿射变换
+
 $$
-    f_{a}(v) =( v-p_{\ast }) (\sum _{i} \widehat{p_i}^{T} \omega_{i} \widehat{p}_{i})^{-1} \sum _{j} \widehat{p_{j}}^{T} \omega_{j} \widehat{q}_{j}+q_{\ast }
+    f_{a}(v) =( v-p_{\ast }) (\sum_{i} \widehat{p_i}^{T} \omega_{i} \widehat{p}_{i})^{-1} \sum_{j} \widehat{p_{j}}^{T} \omega_{j} \widehat{q}_{j}+q_{\ast }
 $$
 
 $$
-    p_{\ast }=\dfrac{\sum _{i} w_{i} p_{i}}{\sum _{i} w_{i}}, q_{\ast }=\dfrac{\sum _{i} w_{i} q_{i}}{\sum _{i} w_{i}}
+    p_{\ast}=\dfrac{\sum_{i} w_{i} p_{i}}{\sum_{i} w_{i}}, q_{\ast }=\dfrac{\sum_{i} w_{i} q_{i}}{\sum_{i} w_{i}}
 $$
 
 $$
-    \widehat{p}_{i}=p_{i}-p_{\ast}, \widehat{q}_{i}=q_{i}-q_{\ast}, \omega_i=\frac{1}{|p_{i}-v|^{2\alpha}}
+    \widehat{p}_{i}=p_{i}-p_{\ast}, \widehat{q}_{i}=q_{i}-q_{\ast}, \boldsymbol{\omega}_i=\frac{1}{|p_{i}-v|^{2\boldsymbol{\alpha}}}
 $$
 
 <center>
@@ -144,14 +142,21 @@ $$
 </center>
 
 ### 2.基于MLS的相似变换
+
 $$
-    f_{s}(v) =\sum _{i} \widehat{q}_{i} (\dfrac{1}{\mu _{s}} A_{i}) + q_{\ast }
+    f_{s}(v) =\sum_{i} \widehat{q}_{i} (\dfrac{1}{\mu_{s}} A_{i}) + q_{\ast }
 $$
 
 $$
-    \mu_{s} =\sum _{i} w_{i} \widehat{p}_{i} \widehat{p_{i}}^{T}, A_{i}=\omega _{i} 
-    \begin{pmatrix} \widehat{p}_{i} \\ -\widehat{p}_{i}^{\bot}\end{pmatrix}
-    \begin{pmatrix} v -p_{\ast } \\ -( v -p_{\ast })^{\bot} \end{pmatrix}^{T}, 
+    \mu_{s} =\sum_{i} w_{i} \widehat{p}_{i} \widehat{p_{i}}^{T}, A_{i}=\omega _{i} 
+    \begin{pmatrix} 
+        \widehat{p}_{i} \\ 
+        -\widehat{p}_{i}^{\bot}
+    \end{pmatrix}
+    \begin{pmatrix} 
+        v -p_{\ast } \\ 
+        -( v -p_{\ast })^{\bot} 
+    \end{pmatrix}^{T}, 
     (x, y)^{\bot}=(-y, x)
 $$
 
@@ -165,14 +170,21 @@ $$
 </center>
 
 ### 3.基于MLS的刚性变换
+
 $$
     f_{r}(v) =| v-p_{\ast }| \dfrac{\overrightarrow{f_r} (v) }{| \overrightarrow{f_r}(v)| }+q_{\ast } 
 $$
 
 $$
     \overrightarrow{f_r}(v)=\sum_{i} \widehat{q}_{i} A_i, A_{i}=\omega _{i}
-    \begin{pmatrix} \widehat{p}_{i} \\ -\widehat{p}_{i}^{\bot} \end{pmatrix}
-    \begin{pmatrix} v -p_{\ast } \\ -(v -p_{\ast })^{\bot} \end{pmatrix}^{T}
+    \begin{pmatrix} 
+        \widehat{p}_{i} \\ 
+        -\widehat{p}_{i}^{\bot} 
+    \end{pmatrix}
+    \begin{pmatrix} 
+        v -p_{\ast } \\ 
+        -(v -p_{\ast })^{\bot} 
+    \end{pmatrix}^{T}
 $$
 
 <center>
@@ -191,9 +203,25 @@ $$
     f(v) = \sum_{i=1}^{n} \alpha_i R(\Vert v-p_i \Vert) + Av+b
 $$
 
-其中 $R$ 是RBF基函数，这里选取 $R(d)=(d^2+r^2)^{\alpha}$ ，默认 $r=10,\alpha=0.5$ 。$A \in R^{2 \times 2}$ 和 $b \in R^{2}$ 是仿射变换的参数。
+其中 $R$ 是RBF基函数，这里选取 
+$R(d)=(d^2+r^2)^{\alpha}$ 
+，默认 
+$r=10,\alpha=0.5$ 
+。
+$A \in \mathbb{R}^{2 \times 2}$ 
+和 
+$b \in \mathbb{R}^{2}$ 
+是仿射变换的参数。
 
-变形函数 $f(v)$ 有 $2n+6$ 个待定系数，$f(p _ i) = q _ i$ 只给出了 $2n$ 个约束，为此我们添加以下6个约束：
+变形函数 
+$f(v)$ 
+有 
+$2n+6$ 
+个待定系数，
+$f(p_i) = q_i$ 
+只给出了 
+$2n$ 
+个约束，为此我们添加以下6个约束：
 
 $$
 \left[\begin{array}{c}
@@ -208,7 +236,9 @@ p _ 1 & \dots & p _ n\newline
 =\mathbf{0} _ {3\times 2}
 $$
 
-通过解线性方程组即可得到 $f(v)$。
+通过解线性方程组即可得到 
+$f(v)$
+。
 
 <center>
 <figure>
@@ -226,9 +256,19 @@ $$
     f(v) = \sum_{i=1}^{n} w_i(v)f_i(v)
 $$
 
-其中 $f_i(v)$ 为仿射变换 $q_i+D_i(p-p_i)$，$w_i(v)$ 形如
-$\frac{\sigma_i(v)}{\sum_{j=1}^{n} \sigma_j(v)}$ ，
-这里的 $\sigma_i(v)=\frac{1}{\Vert v - p_i\Vert^{\alpha}}$，默认 $\alpha=2$。
+其中 
+$f_i(v)$
+为仿射变换 
+$q_i+D_i(p-p_i)$
+，
+$w_{i}(v)$
+形如
+$\frac{\sigma_i(v)}{\sum_{j=1}^{n} \sigma_j(v)}$ 
+，这里的 
+$\sigma_i(v)=\frac{1}{\Vert v - p_i\Vert^{\alpha}}$
+，默认 
+$\alpha=2$
+。
 
 于是我们需要通过最小化如下能量来得到 $D_i$ ：
 
