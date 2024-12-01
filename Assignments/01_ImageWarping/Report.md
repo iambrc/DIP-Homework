@@ -176,7 +176,7 @@ $$
 $$
 
 $$
-    \overrightarrow{f_r}(v)=\sum_{i} \widehat{q}\_{i} A_i, A_{i}=\boldsymbol{\omega}_{i}
+    \overrightarrow{f_r}(v)=\sum_{i} \widehat{q}\_{i} A_i, A_{i}=\boldsymbol{\omega}\_{i}
     \begin{pmatrix} 
         \widehat{p}\_{i} \\ 
         -\widehat{p}\_{i}^{\bot} 
@@ -327,8 +327,6 @@ $$
 > 
 > opencv教程：[opencv-python教程](https://codec.wang/docs/opencv)
 
-(从Github上看Report.md有些数学公式不知道为什么无法正常显示，在vscode上是可以正常显示的，可以下载Report.md用vscode打开)
-
-(另外录制Gif文件内存太大不好推送到Github上，因此报告里贴了图片)
+(录制Gif文件内存太大不好推送到Github上，因此报告里贴了图片)
 
 (如有错误欢迎指正， 后续可能会有更新和修改)

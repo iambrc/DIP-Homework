@@ -27,7 +27,7 @@ S = torch.diag_embed(scales)
 Covs3d = torch.matmul(torch.matmul(R, S), R.transpose(-1, -2))  # (N, 3, 3)
 ```
 
-2.计算投影变换的Jacobian矩阵： 由透视投影关系： $ x' = f_x \frac{x}{z}, y' = f_y \frac{y}{z} $，计算可得Jacobian矩阵：
+2.计算投影变换的Jacobian矩阵： 由透视投影关系： $ x' = f_x \frac{x}{z}, y' = f_y \frac{y}{z} $  ，计算可得Jacobian矩阵：
 
 $$
     \begin{pmatrix}
